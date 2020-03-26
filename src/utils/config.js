@@ -96,6 +96,7 @@ const PATTERN_ETH = /^0x[a-fA-F0-9]{40}$/g;
 const PATTERN_CYBER_VALOPER = /^cybervaloper[a-zA-Z0-9]{39}$/g;
 const PATTERN_TX = /[0-9A-F]{64}$/g;
 const PATTERN_IPFS_HASH = /^Qm[a-zA-Z0-9]{44}$/g;
+const PATTERN_BLOCK = /^[0-9]+$/g;
 
 export {
   TAKEOFF,
@@ -114,4 +115,5 @@ export {
   PATTERN_IPFS_HASH,
   PATTERN_COSMOS,
   PATTERN_ETH,
+  PATTERN_BLOCK,
 };
