@@ -98,6 +98,7 @@ class GolRelevance extends React.Component {
                 <Pane marginY={0} marginX="auto" width="70%">
                   <SearchItem
                     hash={`#${index + 1} ${item.cid}`}
+                    text={item.cid}
                     rank={item.rank}
                     grade={getRankGrade(item.rank)}
                     // status="success"
