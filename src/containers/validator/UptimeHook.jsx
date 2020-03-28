@@ -42,28 +42,31 @@ function useUptime({ accountUser }) {
     }
   `;
 
-  const { loading, error, data } = useQuery(GET_CHARACTERS);
-  if (loading) {
-    return <Dots />;
-  }
-  if (error) {
-    return `Error! ${error.message}`;
-  }
+  // const { loading, error, data } = useQuery(GET_CHARACTERS);
+  // if (loading) {
+  //   return <Dots />;
+  // }
+  // if (error) {
+  //   return `Error! ${error.message}`;
+  // }
 
   let uptime = 0;
 
-  if (
-    Object.keys(data.pre_commit).length !== 0 &&
-    Object.keys(data.pre_commit_aggregate).length !== 0 &&
-    Object.keys(data.block_aggregate).length !== 0
-  ) {
-    const thisBlock = data.block_aggregate.nodes[0].height;
-    const firstPreCommit = data.pre_commit[0].height;
-    const countPreCommit = data.pre_commit_aggregate.aggregate.count;
-    uptime = countPreCommit / (thisBlock - firstPreCommit);
-  }
+  // console.log('data upTime', data);
 
-  return `${formatNumber(uptime * 100, 2)} %`;
+  // if (
+  //   Object.keys(data.pre_commit).length !== 0 &&
+  //   Object.keys(data.pre_commit_aggregate).length !== 0 &&
+  //   Object.keys(data.block_aggregate).length !== 0
+  // ) {
+  //   const thisBlock = data.block_aggregate.nodes[0].height;
+  //   const firstPreCommit = data.pre_commit[0].height;
+  //   const countPreCommit = data.pre_commit_aggregate.aggregate.count;
+    // uptime = countPreCommit / (thisBlock - firstPreCommit);
+  // }
+
+  // return `${formatNumber(uptime * 100, 2)} %`;
+  return '∞';
 }
 
 export default useUptime;

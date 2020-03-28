@@ -35,7 +35,7 @@ import { getLifetime } from '../../../utils/game-monitors';
 
 const GET_CHARACTERS = `
   query MyQuery {
-    pre_commit_view(order_by: {precommits: desc}, limit: 50, offset: 0) {
+    pre_commit_view(order_by: {precommits: desc}, limit: 146, offset: 0) {
       consensus_pubkey
       precommits
     }
@@ -51,7 +51,7 @@ const GET_CHARACTERS = `
 
 const QueryAddress = address =>
   ` query MyQuery {
-    pre_commit_view(where: {consensus_pubkey: {_eq: "cybervalconspub1zcjduepqed4gxhklt57ap668r955jht8m7t965gsky30sgt6macp4x6rsm8qkqv28l"}}) {
+    pre_commit_view(where: {consensus_pubkey: {_eq: "${address}"}}) {
       consensus_pubkey
       precommits
     }

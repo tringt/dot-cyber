@@ -15,7 +15,7 @@ function Burden({ accountUser }) {
           }
         }
       }
-      order_by: { height: desc }
+      order_by: { timestamp: desc }
       limit: 300
     ) {
       height
