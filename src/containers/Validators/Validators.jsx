@@ -186,7 +186,7 @@ class Validators extends Component {
       delegationsData.forEach(item => {
         validators.forEach((itemValidators, j) => {
           if (itemValidators.operator_address === item.validator_address) {
-            validators[j].delegation = item.balance;
+            validators[j].delegation = item.balance.amount;
           }
         });
       });

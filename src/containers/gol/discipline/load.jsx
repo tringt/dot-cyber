@@ -19,7 +19,7 @@ const Load = ({ addressLedger, reward = 0, won = 0, golLoadProps, load }) => {
   useEffect(() => {
     if (addressLedger !== null) {
       const fetchData = async () => {
-        const data = await getLoad(addressLedger.bech32);
+        const data = await getLoad(addressLedger.bech32 || addressLedger);
         const cybAbsolute = data * currentPrize;
         setCybWonAbsolute(cybAbsolute);
         golLoadProps(cybAbsolute);

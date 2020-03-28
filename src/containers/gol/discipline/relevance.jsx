@@ -29,7 +29,8 @@ const Relevance = ({ addressLedger, reward = 0, won = 0, dataBlock }) => {
         }
       }
     }
-    rewards_view(where: {_and: [{block: {_eq: ${dataBlock}}}, {subject: {_eq: "${addressLedger.bech32}"}}]}) {
+    rewards_view(where: {_and: [{block: {_eq: ${dataBlock}}}, {subject: {_eq: "${addressLedger.bech32 ||
+    addressLedger}"}}]}) {
       object
       subject
       rank

@@ -440,8 +440,8 @@ export const getTotalEUL = async data => {
       data.delegations !== 0
     ) {
       data.delegations.forEach((delegation, i) => {
-        balance.total += Math.floor(parseFloat(delegation.balance));
-        balance.delegation += Math.floor(parseFloat(delegation.balance));
+        balance.total += Math.floor(parseFloat(delegation.balance.amount));
+        balance.delegation += Math.floor(parseFloat(delegation.balance.amount));
       });
     }
 
