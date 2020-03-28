@@ -4,7 +4,7 @@ import { fromWei, toBN, toWei } from 'web3-utils';
 import withWeb3 from '../../components/web3/withWeb3';
 import { Statistics } from './statistics';
 import ActionBarAuction from './actionBar';
-import { Dinamics } from './dinamics';
+import Dinamics from './dinamics';
 import Table from './table';
 import { Loading } from '../../components/index';
 import {
@@ -523,7 +523,7 @@ class Auction extends PureComponent {
             roundAll={numberOfDays}
             timeLeft={timeLeft}
             currentPrice={exponentialToDecimal(currentPrice.toPrecision(2))}
-            raised={Math.round(raised * 10000) / 10000}
+            raised={exponentialToDecimal(raised.toPrecision(2))}
             cap={formatNumber(thc * currentPrice)}
             TOKEN_NAME={TOKEN_NAME}
           />
