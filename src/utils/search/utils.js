@@ -348,17 +348,18 @@ export const getAccountBandwidth = async address => {
   }
 };
 
-export const statusNode = () =>
-  new Promise(resolve =>
-    axios({
+export const statusNode = async () => {
+  try {
+    const response = await axios({
       method: 'get',
-      url: `${CYBER_NODE_URL_API}/status`,
-    })
-      .then(response => {
-        resolve(response.data.result);
-      })
-      .catch(e => {})
-  );
+      url: `${CYBER_NODE_URL}/api/status`,
+    });
+    return response.data.result;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
 
 export const getRelevance = (page = 0, perPage = 50) =>
   new Promise(resolve =>
@@ -618,7 +619,7 @@ export const getCurrentBandwidthPrice = async () => {
     return response.data.result.price;
   } catch (e) {
     console.log(e);
-    return 0;
+    return null;
   }
 };
 
