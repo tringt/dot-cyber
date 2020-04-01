@@ -59,6 +59,7 @@ class AppRouter extends React.Component {
     } else {
       this.setState({ loader: false });
     }
+
   }
 
   isMobileTablet = () => {

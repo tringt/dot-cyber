@@ -372,53 +372,6 @@ export const getRelevance = (page = 0, perPage = 50) =>
       .catch(e => {})
   );
 
-export const getBalance = async (address, node) => {
-  try {
-    const availablePromise = await axios({
-      method: 'get',
-      url: `${node || CYBER_NODE_URL_LCD}/bank/balances/${address}`,
-    });
-
-    const delegationsPromise = await axios({
-      method: 'get',
-      url: `${node ||
-        CYBER_NODE_URL_LCD}/staking/delegators/${address}/delegations`,
-    });
-
-    const unbondingPromise = await axios({
-      method: 'get',
-      url: `${node ||
-        CYBER_NODE_URL_LCD}/staking/delegators/${address}/unbonding_delegations`,
-    });
-
-    const rewardsPropsise = await axios({
-      method: 'get',
-      url: `${node ||
-        CYBER_NODE_URL_LCD}/distribution/delegators/${address}/rewards`,
-    });
-
-    const response = {
-      available: availablePromise.data.result[0],
-      delegations: delegationsPromise.data.result,
-      unbonding: unbondingPromise.data.result,
-      rewards:
-        rewardsPropsise.data.result.total !== null
-          ? rewardsPropsise.data.result.total[0]
-          : 0,
-    };
-
-    return response;
-  } catch (e) {
-    console.log(e);
-    return {
-      available: 0,
-      delegations: 0,
-      unbonding: 0,
-      rewards: 0,
-    };
-  }
-};
-
 export const getTotalEUL = async data => {
   const balance = {
     available: 0,
@@ -440,8 +393,15 @@ export const getTotalEUL = async data => {
       data.delegations !== 0
     ) {
       data.delegations.forEach((delegation, i) => {
-        balance.total += Math.floor(parseFloat(delegation.balance.amount));
-        balance.delegation += Math.floor(parseFloat(delegation.balance.amount));
+        if (delegation.balance.amount) {
+          balance.total += Math.floor(parseFloat(delegation.balance.amount));
+          balance.delegation += Math.floor(
+            parseFloat(delegation.balance.amount)
+          );
+        } else {
+          balance.total += Math.floor(parseFloat(delegation.balance));
+          balance.delegation += Math.floor(parseFloat(delegation.balance));
+        }
       });
     }
 
@@ -623,16 +583,16 @@ export const getTotalRewards = async delegatorAddr => {
   }
 };
 
-export const getDelegations = async address => {
+export const getDelegations = async (address, node = CYBER_NODE_URL_LCD) => {
   try {
     const response = await axios({
       method: 'get',
-      url: `${CYBER_NODE_URL_LCD}/staking/delegators/${address}/delegations`,
+      url: `${node}/staking/delegators/${address}/delegations`,
     });
     return response.data.result;
   } catch (e) {
     console.log(e);
-    return 0;
+    return null;
   }
 };
 
@@ -729,5 +689,243 @@ export const getGraphQLQuery = async query => {
   } catch (e) {
     console.log(e);
     return null;
+  }
+};
+
+export const getParamStaking = async () => {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${CYBER_NODE_URL_LCD}/staking/parameters`,
+    });
+    return response.data.result;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
+export const getParamSlashing = async () => {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${CYBER_NODE_URL_LCD}/slashing/parameters`,
+    });
+    return response.data.result;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
+export const getParamDistribution = async () => {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${CYBER_NODE_URL_LCD}/distribution/parameters`,
+    });
+    return response.data.result;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
+export const getParamBandwidth = async () => {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${CYBER_NODE_URL_LCD}/bandwidth/parameters`,
+    });
+    return response.data.result;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
+export const getParamGov = async () => {
+  try {
+    const responseGovDeposit = await axios({
+      method: 'get',
+      url: `${CYBER_NODE_URL_LCD}/gov/parameters/deposit`,
+    });
+
+    const responseGovTallying = await axios({
+      method: 'get',
+      url: `${CYBER_NODE_URL_LCD}/gov/parameters/tallying`,
+    });
+
+    const responseGovVoting = await axios({
+      method: 'get',
+      url: `${CYBER_NODE_URL_LCD}/gov/parameters/voting`,
+    });
+
+    const response = {
+      deposit: responseGovDeposit.data.result,
+      voting: responseGovTallying.data.result,
+      tallying: responseGovVoting.data.result,
+    };
+
+    return response;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
+export const getParamRank = async () => {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${CYBER_NODE_URL_LCD}/rank/parameters`,
+    });
+    return response.data.result;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
+export const getParamNetwork = async (address, node) => {
+  try {
+    let staking = null;
+    let slashing = null;
+    let distribution = null;
+    let bandwidth = null;
+    let gov = null;
+    let rank = null;
+
+    const dataStaking = await getParamStaking();
+    if (dataStaking !== null) {
+      staking = dataStaking;
+    }
+    const dataSlashing = await getParamSlashing();
+    if (dataSlashing !== null) {
+      slashing = dataSlashing;
+    }
+    const dataDistribution = await getParamDistribution();
+    if (dataDistribution !== null) {
+      distribution = dataDistribution;
+    }
+    const dataGov = await getParamGov();
+    if (dataGov !== null) {
+      gov = dataGov;
+    }
+    const dataBandwidth = await getParamBandwidth();
+    if (dataBandwidth !== null) {
+      bandwidth = dataBandwidth;
+    }
+
+    const dataRank = await getParamRank();
+    if (dataRank !== null) {
+      rank = dataRank;
+    }
+
+    const response = {
+      staking,
+      slashing,
+      distribution,
+      bandwidth,
+      gov,
+      rank,
+    };
+
+    return response;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
+export const getAvailable = async (address, node = CYBER_NODE_URL_LCD) => {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${node}/bank/balances/${address}`,
+    });
+    return response.data.result;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
+export const getUnbonding = async (address, node = CYBER_NODE_URL_LCD) => {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${node}/staking/delegators/${address}/unbonding_delegations`,
+    });
+    return response.data.result;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
+export const getRewardsAll = async (address, node = CYBER_NODE_URL_LCD) => {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${node}/distribution/delegators/${address}/rewards`,
+    });
+    return response.data.result;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
+export const getBalance = async (address, node) => {
+  try {
+    let available = 0;
+    let delegations = 0;
+    let unbonding = 0;
+    let rewards = 0;
+
+    const availableData = await getAvailable(address, node);
+    if (availableData !== null) {
+      if (Object.keys(availableData).length > 0) {
+        available = availableData[0];
+      }
+    }
+
+    const delegationsData = await getDelegations(address, node);
+    if (delegationsData !== null) {
+      if (Object.keys(delegationsData).length > 0) {
+        delegations = delegationsData;
+      }
+    }
+
+    const unbondingData = await getUnbonding(address, node);
+    if (unbondingData !== null) {
+      if (Object.keys(unbondingData).length > 0) {
+        unbonding = unbondingData;
+      }
+    }
+
+    const rewardsData = await getRewardsAll(address, node);
+    if (rewardsData !== null) {
+      if (rewardsData.total !== null) {
+        rewards = rewardsData.total[0];
+      }
+    }
+
+    const response = {
+      available,
+      delegations,
+      unbonding,
+      rewards,
+    };
+
+    return response;
+  } catch (e) {
+    return {
+      available: 0,
+      delegations: 0,
+      unbonding: 0,
+      rewards: 0,
+    };
   }
 };

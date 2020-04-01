@@ -49,7 +49,7 @@ const Fans = ({ data }) => {
         <Tooltip
           position="bottom"
           content={`${formatNumber(
-            parseFloat(item.balance)
+            parseFloat(item.balance.amount)
           )} ${CYBER.DENOM_CYBER.toUpperCase()}`}
         >
           <TextTable>

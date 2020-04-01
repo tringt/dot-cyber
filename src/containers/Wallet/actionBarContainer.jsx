@@ -312,7 +312,17 @@ class ActionBarContainer extends Component {
           stage: STAGE_CONFIRMED,
           txHeight: data.height,
         });
-        updateAddress();
+        if (updateAddress) {
+          updateAddress();
+        }
+        return;
+      }
+      if (data.code) {
+        this.setState({
+          stage: STAGE_ERROR,
+          txHeight: data.height,
+          errorMessage: data.raw_log,
+        });
         return;
       }
       if (data.code) {
