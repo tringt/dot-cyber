@@ -13,11 +13,6 @@ function Burden({ accountUser }) {
           height
         }
       }
-      order_by: { timestamp: desc }
-      limit: 300
-    ) {
-      height
-
     }
     block_aggregate(limit: 300, order_by: {height: desc}) {
       nodes {

@@ -8,7 +8,7 @@ import {
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import { Link } from 'react-router-dom';
-import { formatValidatorAddress } from '../../utils/utils';
+import { trimString } from '../../utils/utils';
 import { PATTERN_IPFS_HASH } from '../../utils/config';
 import { getIpfsHash } from '../../utils/search/utils';
 
@@ -442,7 +442,7 @@ class Snap extends React.Component {
                   style={{ marginLeft: 10 }}
                   to={`/network/euler-5/tx/${txHash}`}
                 >
-                  {formatValidatorAddress(txHash, 8, 8)}
+                  {trimString(txHash, 8, 8)}
                 </Link>
               </div>
               <button

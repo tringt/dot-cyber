@@ -12,6 +12,7 @@ import {
   getDecimal,
   trimString,
   formatCurrency,
+  exponentialToDecimal,
 } from '../../utils/utils';
 import ActionBarContainer from './actionBarContainer';
 
@@ -464,7 +465,9 @@ class Wallet extends React.Component {
                     }
                     title={
                       <div>
-                        {pocket.cosmos.amount.toPrecision(2)}{' '}
+                        {exponentialToDecimal(
+                          pocket.cosmos.amount.toPrecision(2)
+                        )}{' '}
                         {pocket.cosmos.token}
                       </div>
                     }
@@ -473,7 +476,7 @@ class Wallet extends React.Component {
 
                 <Pane width="80%">
                   <Battery
-                    bwPercent={trimString(
+                    bwPercent={exponentialToDecimal(
                       (
                         (parseFloat(pocket.cyber.bandwidth.remained) /
                           parseFloat(pocket.cyber.bandwidth.max_value)) *
@@ -506,4 +509,4 @@ class Wallet extends React.Component {
   }
 }
 
-export default withWeb3(Wallet);
+export default Wallet;
