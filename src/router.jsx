@@ -57,18 +57,8 @@ class AppRouter extends React.Component {
   }
 
   async componentDidMount() {
-    const deadline = `${TIME_START}`;
-    const startTime = Date.parse(deadline) - Date.parse(new Date());
-
-    if (startTime <= 0) {
-      this.setState({
-        time: false,
-      });
-      this.init();
-      this.setState({ time: false });
-    } else {
-      this.initializeClock(deadline);
-    }
+    this.init();
+    this.setState({ time: false });
   }
 
   isMobileTablet = () => {
