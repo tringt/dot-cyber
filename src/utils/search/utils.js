@@ -395,6 +395,53 @@ export const getRelevance = (page = 0, perPage = 50) =>
       .catch(e => {})
   );
 
+export const getBalance = async (address, node) => {
+  try {
+    const availablePromise = await axios({
+      method: 'get',
+      url: `${node || CYBER_NODE_URL_LCD}/bank/balances/${address}`,
+    });
+
+    const delegationsPromise = await axios({
+      method: 'get',
+      url: `${node ||
+        CYBER_NODE_URL_LCD}/staking/delegators/${address}/delegations`,
+    });
+
+    const unbondingPromise = await axios({
+      method: 'get',
+      url: `${node ||
+        CYBER_NODE_URL_LCD}/staking/delegators/${address}/unbonding_delegations`,
+    });
+
+    const rewardsPropsise = await axios({
+      method: 'get',
+      url: `${node ||
+        CYBER_NODE_URL_LCD}/distribution/delegators/${address}/rewards`,
+    });
+
+    const response = {
+      available: availablePromise.data.result[0],
+      delegations: delegationsPromise.data.result,
+      unbonding: unbondingPromise.data.result,
+      rewards:
+        rewardsPropsise.data.result.total !== null
+          ? rewardsPropsise.data.result.total[0]
+          : 0,
+    };
+
+    return response;
+  } catch (e) {
+    console.log(e);
+    return {
+      available: 0,
+      delegations: 0,
+      unbonding: 0,
+      rewards: 0,
+    };
+  }
+};
+
 export const getTotalEUL = async data => {
   const balance = {
     available: 0,
@@ -610,7 +657,7 @@ export const getDelegations = async (address, node = CYBER_NODE_URL_LCD) => {
   try {
     const response = await axios({
       method: 'get',
-      url: `${node}/staking/delegators/${address}/delegations`,
+      url: `${CYBER_NODE_URL_LCD}/staking/delegators/${address}/delegations`,
     });
     return response.data.result;
   } catch (e) {
@@ -920,6 +967,19 @@ export const getAvailable = async (address, node = CYBER_NODE_URL_LCD) => {
   }
 };
 
+export const getInlfation = async () => {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${CYBER_NODE_URL_LCD}/minting/inflation`,
+    });
+    return response.data.result;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
 export const getUnbonding = async (address, node = CYBER_NODE_URL_LCD) => {
   try {
     const response = await axios({
@@ -946,55 +1006,28 @@ export const getRewardsAll = async (address, node = CYBER_NODE_URL_LCD) => {
   }
 };
 
-export const getBalance = async (address, node) => {
+export const getTxCosmos = async () => {
   try {
-    let available = 0;
-    let delegations = 0;
-    let unbonding = 0;
-    let rewards = 0;
-
-    const availableData = await getAvailable(address, node);
-    if (availableData !== null) {
-      if (Object.keys(availableData).length > 0) {
-        available = availableData[0];
-      }
-    }
-
-    const delegationsData = await getDelegations(address, node);
-    if (delegationsData !== null) {
-      if (Object.keys(delegationsData).length > 0) {
-        delegations = delegationsData;
-      }
-    }
-
-    const unbondingData = await getUnbonding(address, node);
-    if (unbondingData !== null) {
-      if (Object.keys(unbondingData).length > 0) {
-        unbonding = unbondingData;
-      }
-    }
-
-    const rewardsData = await getRewardsAll(address, node);
-    if (rewardsData !== null) {
-      if (rewardsData.total !== null) {
-        rewards = rewardsData.total[0];
-      }
-    }
-
-    const response = {
-      available,
-      delegations,
-      unbonding,
-      rewards,
-    };
-
-    return response;
+    const response = await axios({
+      method: 'get',
+      url: `${COSMOS.GAIA_NODE_URL_LSD}/txs?message.action=send&transfer.recipient=${COSMOS.ADDR_FUNDING}&limit=1000000000`,
+    });
+    return response.data;
   } catch (e) {
-    return {
-      available: 0,
-      delegations: 0,
-      unbonding: 0,
-      rewards: 0,
-    };
+    console.log(e);
+    return null;
+  }
+};
+
+export const getcommunityPool = async () => {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${CYBER_NODE_URL_LCD}/distribution/community_pool`,
+    });
+    return response.data.result;
+  } catch (e) {
+    console.log(e);
+    return null;
   }
 };
