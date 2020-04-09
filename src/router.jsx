@@ -97,6 +97,8 @@ class AppRouter extends React.Component {
     if (!mobile) {
       if (!isSafari) {
         await this.initIpfsNode();
+      } else {
+        this.setState({ loader: false });
       }
     } else {
       this.setState({ loader: false });
