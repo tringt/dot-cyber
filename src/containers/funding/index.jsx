@@ -16,6 +16,8 @@ import {
   getGroupAddress,
 } from '../../utils/fundingMath';
 
+import { getTxCosmos } from '../../utils/search/utils';
+
 const dateFormat = require('dateformat');
 
 const { ATOMsALL } = TAKEOFF;
@@ -62,8 +64,10 @@ class Funding extends PureComponent {
     //     dataTxs: txs
     //   });
     // }
-    this.getDataWS();
+    // this.getDataWS();
     // console.log('groupsDidMount', groups);
+    this.getTxsCosmos();
+    this.getDataWS();
     const dataPin = [];
     const jsonStr = localStorage.getItem('allpin');
     dataPin.push(JSON.parse(jsonStr));
@@ -85,33 +89,37 @@ class Funding extends PureComponent {
     }
   }
 
-  getDataWS = () => {
+  getTxsCosmos = async () => {
+    const dataTx = await getTxCosmos();
+    console.log(dataTx);
+    if (dataTx !== null) {
+      this.setState({
+        dataTxs: dataTx.txs,
+      });
+      this.init(dataTx.txs);
+    }
+  };
+
+  getDataWS = async () => {
     this.ws.onopen = () => {
       console.log('connected');
+      this.ws.send(
+        JSON.stringify({
+          jsonrpc: '2.0',
+          method: 'subscribe',
+          id: '0',
+          params: {
+            query: `tm.event='Tx' AND transfer.recipient='${COSMOS.ADDR_FUNDING}' AND message.action='send'`,
+          },
+        })
+      );
     };
-    this.ws.onmessage = async evt => {
-      // const txs = JSON.parse(localStorage.getItem('txs'));
-      const message = JSON.parse(evt.data);
-      console.log('txs', message);
-      // if (txs == null) {
-      // localStorage.setItem('txs', JSON.stringify(message));
-      this.setState({
-        dataTxs: message,
-      });
-      this.init(message);
-      // } else if (txs.length !== message.length) {
-      //   console.log('localStorage !== ws');
-      //   const diffTsx = diff('txhash', txs, message);
-      //   this.setState({
-      //     dataTxs: message,
-      //   });
-      //   localStorage.setItem('txs', JSON.stringify(message));
-      //   console.log('txsLocalStorage', diff('txhash', txs, message));
-      //   this.init(diffTsx);
 
-      // } else {
-      //   console.log('localStorage == ws');
-      //   this.getItemLocalStorage();
+    this.ws.onmessage = async evt => {
+      const message = JSON.parse(evt.data);
+      console.warn('txs', message);
+      // if (message.result.events) {
+      //   this.getAtomWS(message.result.events);
       // }
     };
 
