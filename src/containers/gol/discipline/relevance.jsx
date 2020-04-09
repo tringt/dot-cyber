@@ -2,13 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { useQuery, useSubscription } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { DISTRIBUTION } from '../../../utils/config';
 import { Dots } from '../../../components';
 import { getRelevance } from '../../../utils/game-monitors';
 import { formatNumber } from '../../../utils/utils';
 import RowTable from '../components/row';
+import { setGolRelevance } from '../../../redux/actions/gol';
 
-const Relevance = ({ addressLedger, reward = 0, won = 0, dataBlock }) => {
+const Relevance = ({
+  addressLedger,
+  reward = 0,
+  won = 0,
+  setGolRelevanceProps,
+  dataBlock,
+}) => {
   if (addressLedger === null) {
     return (
       <RelevanceC
@@ -17,6 +25,7 @@ const Relevance = ({ addressLedger, reward = 0, won = 0, dataBlock }) => {
         won={won}
         arrLink={null}
         addressLedger={addressLedger}
+        setGolRelevanceProps={setGolRelevanceProps}
       />
     );
   }
@@ -63,6 +72,7 @@ const Relevance = ({ addressLedger, reward = 0, won = 0, dataBlock }) => {
       dataBlock={dataBlock}
       dataRelevance={dataQ}
       won={won}
+      setGolRelevanceProps={setGolRelevanceProps}
       arrLink={arrLink}
     />
   );
@@ -74,13 +84,32 @@ const RelevanceC = ({
   addressLedger,
   dataBlock,
   arrLink,
+  setGolRelevanceProps,
+  relevance,
 }) => {
   const [loadingCalc, setLoadingCalc] = useState(true);
   const [cybWonAbsolute, setCybWonAbsolute] = useState(0);
   const [cybWonPercent, setCybWonPercent] = useState(0);
-  const currentPrize = Math.floor(
+  const prize = Math.floor(
     (won / DISTRIBUTION.takeoff) * DISTRIBUTION.relevance
   );
+
+  if (addressLedger === null) {
+    useEffect(() => {
+      setGolRelevanceProps(0, prize);
+    }, [prize]);
+
+    // setLoadingCalc(false);
+    return (
+      <RowTable
+        text={<Link to="/gol/relevance">relevance</Link>}
+        reward={DISTRIBUTION.relevance}
+        currentPrize={prize}
+        cybWonAbsolute={cybWonAbsolute}
+        cybWonPercent={`${formatNumber(cybWonPercent, 2)}%`}
+      />
+    );
+  }
   const GET_LINKAGES = gql`
   query newBlock {
     linkages_view(
@@ -99,19 +128,6 @@ const RelevanceC = ({
   }
 `;
 
-  if (addressLedger === null) {
-    // setLoadingCalc(false);
-    return (
-      <RowTable
-        text={<Link to="/gol/relevance">relevance</Link>}
-        reward={DISTRIBUTION.relevance}
-        currentPrize={currentPrize}
-        cybWonAbsolute={formatNumber(Math.floor(cybWonAbsolute))}
-        cybWonPercent={`${formatNumber(cybWonPercent, 2)}%`}
-      />
-    );
-  }
-
   const { loading, data: dataQ } = useQuery(GET_LINKAGES);
 
   if (loading) {
@@ -121,10 +137,11 @@ const RelevanceC = ({
   const fetchData = async () => {
     const data = await getRelevance(dataRelevance, dataQ);
     console.log(data);
-    const cybAbsolute = data * currentPrize;
-    setCybWonAbsolute(cybAbsolute);
+    const cybAbsolute = data * prize;
+    setGolRelevanceProps(Math.floor(cybAbsolute), prize);
+    setCybWonAbsolute(Math.floor(cybAbsolute));
     if (cybAbsolute !== 0) {
-      const cybPercent = (cybAbsolute / currentPrize) * 100;
+      const cybPercent = (cybAbsolute / prize) * 100;
       setCybWonPercent(cybPercent);
     }
     setLoadingCalc(false);
@@ -135,7 +152,7 @@ const RelevanceC = ({
     <RowTable
       text={<Link to="/gol/relevance">relevance</Link>}
       reward={DISTRIBUTION.relevance}
-      currentPrize={currentPrize}
+      currentPrize={prize}
       cybWonAbsolute={
         loadingCalc ? <Dots /> : formatNumber(Math.floor(cybWonAbsolute))
       }
@@ -146,4 +163,11 @@ const RelevanceC = ({
   );
 };
 
-export default Relevance;
+const mapDispatchprops = dispatch => {
+  return {
+    setGolRelevanceProps: (amount, prize) =>
+      dispatch(setGolRelevance(amount, prize)),
+  };
+};
+
+export default connect(null, mapDispatchprops)(Relevance);

@@ -56,8 +56,8 @@ export {
   TransactionError,
   TextTable,
   StatusTx,
-  ContributeATOMs,
   Vitalik,
+  ContributeATOMs,
 };
 
 export { Nums } from './ui/Numbers';

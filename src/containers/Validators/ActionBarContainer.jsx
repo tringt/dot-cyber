@@ -369,9 +369,8 @@ class ActionBarContainer extends Component {
     const { updateTable } = this.props;
     if (this.state.txHash !== null) {
       this.setState({ stage: STAGE_CONFIRMING });
-      const status = await this.state.ledger.txStatusCyber(this.state.txHash);
-      console.log('status', status);
-      const data = await status;
+      const data = await this.state.ledger.txStatusCyber(this.state.txHash);
+      // console.log(data);
       if (data.logs) {
         this.setState({
           stage: STAGE_CONFIRMED,

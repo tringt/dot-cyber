@@ -10,6 +10,7 @@ import {
   getIpfsHash,
   getAmountATOM,
   getValidatorsInfo,
+  getTxCosmos,
 } from '../../utils/search/utils';
 // import Balance fro./mainnce';
 import Heroes from './heroes';
@@ -59,6 +60,7 @@ class AccountDetails extends React.Component {
       validatorAddress: null,
       consensusAddress: null,
       addressLedger: null,
+      takeoffDonations: 0,
       balance: {
         available: 0,
         delegation: 0,
@@ -84,7 +86,7 @@ class AccountDetails extends React.Component {
     }
     this.getBalanseAccount();
     this.chekPathname();
-    this.getDataWS();
+    this.getTxsCosmos();
   }
 
   componentDidUpdate(prevProps) {
@@ -95,20 +97,12 @@ class AccountDetails extends React.Component {
     }
   }
 
-  getDataWS = async () => {
-    this.ws.onopen = () => {
-      console.log('connected');
-    };
-
-    this.ws.onmessage = async evt => {
-      const message = JSON.parse(evt.data);
-      console.log('txs', message);
-      this.getAtom(message);
-    };
-
-    this.ws.onclose = () => {
-      console.log('disconnected');
-    };
+  getTxsCosmos = async () => {
+    const dataTx = await getTxCosmos();
+    console.log(dataTx);
+    if (dataTx !== null) {
+      this.getAtom(dataTx.txs);
+    }
   };
 
   getAtom = async dataTxs => {
@@ -124,6 +118,7 @@ class AccountDetails extends React.Component {
     this.setState({
       won,
       loading: false,
+      takeoffDonations: amount,
     });
   };
 
@@ -255,6 +250,7 @@ class AccountDetails extends React.Component {
       consensusAddress,
       won,
       loading,
+      takeoffDonations,
     } = this.state;
 
     let content;
@@ -334,6 +330,7 @@ class AccountDetails extends React.Component {
               addressLedger={account}
               validatorAddress={validatorAddress}
               consensusAddress={consensusAddress}
+              takeoffDonations={takeoffDonations}
               won={won}
             />
           )}

@@ -281,29 +281,50 @@ export const getValidators = async () => {
   }
 };
 
-export const getValidatorsUnbonding = () =>
-  new Promise(resolve =>
-    axios({
+export const getValidatorsUnbonding = async () => {
+  try {
+    const response = await axios({
       method: 'get',
       url: `${CYBER_NODE_URL_LCD}/staking/validators?status=unbonding`,
-    })
-      .then(response => {
-        resolve(response.data.result);
-      })
-      .catch(e => {})
-  );
+    });
+    return response.data.result;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
 
-export const getValidatorsUnbonded = () =>
-  new Promise(resolve =>
-    axios({
+export const getValidatorsUnbonded = async () => {
+  try {
+    const response = await axios({
       method: 'get',
       url: `${CYBER_NODE_URL_LCD}/staking/validators?status=unbonded`,
-    })
-      .then(response => {
-        resolve(response.data.result);
-      })
-      .catch(e => {})
-  );
+    });
+    return response.data.result;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
+export const getAllValidators = async () => {
+  const allValidators = [];
+
+  const responseGetValidators = await getValidators();
+  if (responseGetValidators !== null) {
+    allValidators.push(...responseGetValidators);
+  }
+  const responseGetValidatorsUnbonding = await getValidatorsUnbonding();
+  if (responseGetValidatorsUnbonding !== null) {
+    allValidators.push(...responseGetValidatorsUnbonding);
+  }
+  const responseGetValidatorsUnbonded = await getValidatorsUnbonded();
+  if (responseGetValidatorsUnbonded !== null) {
+    allValidators.push(...responseGetValidatorsUnbonded);
+  }
+
+  return allValidators;
+};
 
 export const selfDelegationShares = async (
   delegatorAddress,
@@ -707,6 +728,32 @@ export const getParamStaking = async () => {
   }
 };
 
+export const getSendTxToTakeoff = async (sender, recipient) => {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${COSMOS.GAIA_NODE_URL_LSD}/txs?message.action=send&message.sender=${sender}&transfer.recipient=${recipient}&limit=1000000000`,
+    });
+    return response.data.txs;
+  } catch (e) {
+    console.log(e);
+    return [];
+  }
+};
+
+export const getCurrentNetworkLoad = async () => {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${CYBER_NODE_URL_API}/current_network_load`,
+    });
+    return response.data.result;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
 export const getParamSlashing = async () => {
   try {
     const response = await axios({
@@ -789,6 +836,19 @@ export const getParamRank = async () => {
   }
 };
 
+export const getParamInlfation = async () => {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${CYBER_NODE_URL_LCD}/minting/parameters`,
+    });
+    return response.data.result;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
 export const getParamNetwork = async (address, node) => {
   try {
     let staking = null;
@@ -797,6 +857,7 @@ export const getParamNetwork = async (address, node) => {
     let bandwidth = null;
     let gov = null;
     let rank = null;
+    let inlfation = null;
 
     const dataStaking = await getParamStaking();
     if (dataStaking !== null) {
@@ -824,6 +885,11 @@ export const getParamNetwork = async (address, node) => {
       rank = dataRank;
     }
 
+    const dataInlfation = await getParamInlfation();
+    if (dataInlfation !== null) {
+      inlfation = dataInlfation;
+    }
+
     const response = {
       staking,
       slashing,
@@ -831,6 +897,7 @@ export const getParamNetwork = async (address, node) => {
       bandwidth,
       gov,
       rank,
+      inlfation,
     };
 
     return response;

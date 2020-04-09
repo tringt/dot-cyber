@@ -28,6 +28,9 @@ import { initIpfs, setIpfsStatus } from './redux/actions/ipfs';
 import BlockDetails from './containers/blok/blockDetails';
 import Txs from './containers/txs';
 import Block from './containers/blok';
+
+import { TIME_START } from './utils/config';
+
 import GolDelegation from './containers/gol/pages/delegation';
 import GolLifetime from './containers/gol/pages/lifetime';
 import GolRelevance from './containers/gol/pages/relevance';
@@ -54,19 +57,13 @@ class AppRouter extends React.Component {
   }
 
   async componentDidMount() {
-    const { setIpfsStatusProps } = this.props;
-    setIpfsStatusProps(false);
-    let resultGMT;
-    const offset = new Date().getTimezoneOffset();
-    if (offset < 0) {
-      resultGMT = `GMT+${offset / -60}`;
-    } else {
-      resultGMT = `GMT-${offset / 60}`;
-    }
-    const deadline = `Mart 30 2020 21:59:00 ${resultGMT}`;
+    const deadline = `${TIME_START}`;
     const startTime = Date.parse(deadline) - Date.parse(new Date());
 
     if (startTime <= 0) {
+      this.setState({
+        time: false,
+      });
       this.init();
       this.setState({ time: false });
     } else {
@@ -236,8 +233,11 @@ class AppRouter extends React.Component {
             flexDirection: 'column',
           }}
         >
-          <div className="countdown-time text-glich" data-text="Start">
-            Start
+          <div
+            className="countdown-time text-glich"
+            data-text="euler-6 will start in"
+          >
+            euler-6 will start in
           </div>
           <Timer
             days={days}
