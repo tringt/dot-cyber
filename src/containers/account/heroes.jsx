@@ -129,7 +129,7 @@ const Heroes = ({ data, ...props }) => {
         <Table.TextCell textAlign="end">
           <Tooltip
             content={`${formatNumber(
-              parseFloat(item.balance)
+              parseFloat(item.balance.amount)
             )} ${CYBER.DENOM_CYBER.toUpperCase()}`}
             position="bottom"
           >
