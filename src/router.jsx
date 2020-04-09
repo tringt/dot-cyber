@@ -92,9 +92,12 @@ class AppRouter extends React.Component {
     const { setIpfsStatusProps } = this.props;
     setIpfsStatusProps(false);
     const mobile = this.isMobileTablet();
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
     // this.setState({ loader: false });
     if (!mobile) {
-      await this.initIpfsNode();
+      if (!isSafari) {
+        await this.initIpfsNode();
+      }
     } else {
       this.setState({ loader: false });
     }
