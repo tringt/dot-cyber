@@ -57,18 +57,8 @@ class AppRouter extends React.Component {
   }
 
   async componentDidMount() {
-    const deadline = `${TIME_START}`;
-    const startTime = Date.parse(deadline) - Date.parse(new Date());
-
-    if (startTime <= 0) {
-      this.setState({
-        time: false,
-      });
-      this.init();
-      this.setState({ time: false });
-    } else {
-      this.initializeClock(deadline);
-    }
+    this.init();
+    this.setState({ time: false });
   }
 
   isMobileTablet = () => {
@@ -92,9 +82,14 @@ class AppRouter extends React.Component {
     const { setIpfsStatusProps } = this.props;
     setIpfsStatusProps(false);
     const mobile = this.isMobileTablet();
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
     // this.setState({ loader: false });
     if (!mobile) {
-      await this.initIpfsNode();
+      if (!isSafari) {
+        await this.initIpfsNode();
+      } else {
+        this.setState({ loader: false });
+      }
     } else {
       this.setState({ loader: false });
     }

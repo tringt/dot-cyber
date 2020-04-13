@@ -224,7 +224,7 @@ class SearchResults extends React.Component {
 
     if (query.match(PATTERN_CYBER)) {
       searchItems.push(
-        <Link to={`/network/euler-5/contract/${query}`}>
+        <Link to={`/network/euler/contract/${query}`}>
           <SearchItem
             hash={`${query}_PATTERN_CYBER`}
             text="Explore details of contract"
@@ -239,7 +239,7 @@ class SearchResults extends React.Component {
 
     if (query.match(PATTERN_CYBER_VALOPER)) {
       searchItems.push(
-        <Link to={`/network/euler-5/hero/${query}`}>
+        <Link to={`/network/euler/hero/${query}`}>
           <SearchItem
             hash={`${query}_PATTERN_CYBER_VALOPER`}
             text="Explore details of hero"
@@ -252,7 +252,7 @@ class SearchResults extends React.Component {
 
     if (query.match(PATTERN_TX)) {
       searchItems.push(
-        <Link to={`/network/euler-5/tx/${query}`}>
+        <Link to={`/network/euler/tx/${query}`}>
           <SearchItem
             hash={`${query}_PATTERN_TX`}
             text="Explore details of tx "
@@ -267,7 +267,7 @@ class SearchResults extends React.Component {
 
     if (query.match(PATTERN_BLOCK)) {
       searchItems.push(
-        <Link to={`/network/euler-5/block/${query}`}>
+        <Link to={`/network/eule/block/${query}`}>
           <SearchItem
             hash={`${query}_PATTERN_BLOCK`}
             text="Explore details of block "
