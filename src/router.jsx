@@ -272,7 +272,7 @@ class AppRouter extends React.Component {
           />
           <Route exact path="/search/:query" component={SearchResults} />
           <Route path="/gift/:address?" component={Gift} />
-          <Route path="/takeoff" component={Funding} />
+          <Route path="/gol/takeoff" component={Funding} />
           <Route path="/tot" component={Got} />
           <Route path="/auction" component={Auction} />
           <Route path="/brain" component={Brain} />

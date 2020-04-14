@@ -24,8 +24,6 @@ import {
 import { LEDGER, CYBER, PATTERN_IPFS_HASH } from '../../utils/config';
 import { trimString } from '../../utils/utils';
 
-const { CYBER_NODE_URL } = CYBER;
-
 const {
   MEMO,
   HDPATH,

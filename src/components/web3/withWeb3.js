@@ -3,15 +3,12 @@ import waitForWeb3 from './waitForWeb3';
 import abiAuction from '../../../contracts/Auction';
 import abiAuctionUtils from '../../../contracts/AuctionUtils';
 import abiToken from '../../../contracts/Token';
-
 import { Loading } from '../index';
 import NotFound from '../../containers/application/notFound';
 
 import { AUCTION, NETWORKSIDS } from '../../utils/config';
 
-const {
-  ADDR_SMART_CONTRACT,
-} = AUCTION;
+const { ADDR_SMART_CONTRACT } = AUCTION;
 
 const injectWeb3 = InnerComponent =>
   class extends PureComponent {

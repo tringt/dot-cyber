@@ -270,6 +270,8 @@ class Brain extends React.Component {
     } = this.state;
     const { block } = this.props;
 
+    console.log(block);
+
     let content;
 
     if (loading) {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import TransportU2F from '@ledgerhq/hw-transport-u2f';
-import { Input, ActionBar, Pane, Text } from '@cybercongress/gravity';
+import { Input, ActionBar, Pane, Text, Button } from '@cybercongress/gravity';
 import { CosmosDelegateTool } from '../../utils/ledger';
 import { COSMOS, LEDGER } from '../../utils/config';
 import {
@@ -11,6 +11,8 @@ import {
   Confirmed,
   TransactionSubmitted,
   TransactionError,
+  ActionBarContentText,
+  LinkWindow,
 } from '../../components';
 
 const {
@@ -142,7 +144,19 @@ class ActionBarTakeOff extends Component {
   getAddress = async () => {
     const { ledger } = this.state;
     try {
+      const accounts = {};
       const address = await ledger.retrieveAddress(HDPATH);
+      const addressLedgerCyber = await ledger.retrieveAddressCyber(HDPATH);
+
+      accounts.cyber = addressLedgerCyber;
+      accounts.cosmos = address;
+      accounts.keys = 'ledger';
+
+      console.log('address', addressLedgerCyber);
+
+      localStorage.setItem('ledger', JSON.stringify(addressLedgerCyber));
+      localStorage.setItem('pocket', JSON.stringify(accounts));
+
       console.log('address', address);
       this.setState({
         address,
@@ -302,6 +316,18 @@ class ActionBarTakeOff extends Component {
       valueSelect: e.target.value,
     });
 
+  handleKeyPressFuckGoogle = e => {
+    const { toSend } = this.state;
+    if (toSend.length > 0) {
+      if (e.key === 'Enter') {
+        this.setState({
+          stage: STAGE_SELECTION,
+          height50: true,
+        });
+      }
+    }
+  };
+
   onClickFuckGoogle = () => {
     this.setState({
       stage: STAGE_SELECTION,
@@ -353,9 +379,9 @@ class ActionBarTakeOff extends Component {
     });
   };
 
-  onChangeInputContributeATOMs = async e => {
+  onChangeInputContributeATOMs = async evt => {
     this.setState({
-      toSend: e.target.value,
+      toSend: evt.target.value,
     });
   };
 
@@ -406,9 +432,146 @@ class ActionBarTakeOff extends Component {
       txHash,
       txHeight,
       stage,
-      valueAmount,
       errorMessage,
     } = this.state;
+
+    // SELECT
+    //
+    // if (stage === STAGE_INIT) {
+    //   return (
+    //     <ActionBar>
+    //       <Button marginX={10} onClick={this.onClickFuckGoogle}>
+    //         Custom transaction
+    //       </Button>
+    //       <Button marginX={10} onClick={this.onClickFuckGoogle}>
+    //         Donate with Ledger
+    //       </Button>
+    //     </ActionBar>
+    //   );
+    // }
+
+    // CUSTOM FLOW
+    //
+    // 1.1
+    //
+    // if (stage === STAGE_INIT) {
+    //   return (
+    //     <ActionBar>
+    //       <ActionBarContentText>
+    //         You can send donations directly to cyber~Congress multisig only if you control private keys of sending account.
+    //       </ActionBarContentText>
+    //       <Button marginX={10} onClick={this.onClickFuckGoogle}>
+    //         I control
+    //       </Button>
+    //     </ActionBar>
+    //   );
+    // }
+
+    // 1.2
+    //
+    // if (stage === STAGE_INIT) {
+    //   return (
+    //     <ActionBar>
+    //       <ActionBarContentText>
+    //         CYB will be allocated to sending addresses. All donations from custodial wallets, exchanges and banks will be lost.
+    //       </ActionBarContentText>
+    //       <Button marginX={10} onClick={this.onClickFuckGoogle}>
+    //         I understand
+    //       </Button>
+    //     </ActionBar>
+    //   );
+    // };
+
+    // 1.3
+    // Put to pocket
+    // if (stage === STAGE_INIT) {
+    //   return (
+    //     <ActionBar>
+    //       <ActionBarContentText>
+    //         To track your donation provide your sending address{' '}
+    //         <Input
+    //           placeholder="address"
+    //           maxWidth="170px"
+    //           textAlign="end"
+    //           marginLeft={10}
+    //           autoFocus
+    //           height={42}
+    //           width="unset"
+    //         />
+    //       </ActionBarContentText>
+    //       <Button marginX={10} onClick={this.onClickFuckGoogle}>
+    //         Track
+    //       </Button>
+    //     </ActionBar>
+    //   );
+    // }
+
+    // 1.4
+    //
+    // if (stage === STAGE_INIT) {
+    //   return (
+    //     <ActionBar>
+    //       <ActionBarContentText display="inline">
+    //         <Pane display="inline">
+    //           By donating ATOM you agree with donation terms defined in
+    //         </Pane>{' '}
+    //         <LinkWindow to="https://ipfs.io/ipfs/QmceNpj6HfS81PcCaQXrFMQf7LR5FTLkdG9sbSRNy3UXoZ">
+    //           Whitepaper
+    //         </LinkWindow>{' '}
+    //         <Pane display="inline">and</Pane>{' '}
+    //         <LinkWindow to="https://cybercongress.ai/game-of-links/">
+    //           Game of Links rules
+    //         </LinkWindow>
+    //         .
+    //       </ActionBarContentText>
+    //       <Button marginX={10} onClick={this.onClickFuckGoogle}>
+    //         I agree
+    //       </Button>
+    //     </ActionBar>
+    //   );
+    // }
+
+    // // 1.5
+    // //
+    // if (stage === STAGE_INIT) {
+    //   return (
+    //     <ActionBar>
+    //       <ActionBarContentText>
+    //         Amazing, now you can send ATOMs
+    //       </ActionBarContentText>
+    //       <Button paddingX={10} marginX={10} onClick={this.onClickFuckGoogle}>
+    //         Copy address
+    //       </Button>
+    //       <Button paddingX={10} marginX={10} onClick={this.onClickFuckGoogle}>
+    //         Show address
+    //       </Button>
+    //       <Button paddingX={10} marginX={10} onClick={this.onClickFuckGoogle}>
+    //         Download tx
+    //       </Button>
+    //     </ActionBar>
+    //   );
+    // }
+
+    // // 1.6
+    //
+    // if (stage === STAGE_INIT) {
+    //   return (
+    //     <ActionBar>
+    //       <ActionBarContentText>
+    //         Now its time to choose your path
+    //       </ActionBarContentText>
+    //       <Button marginX={10} onClick={this.onClickFuckGoogle}>
+    //         Master
+    //       </Button>
+    //       <Button marginX={10} onClick={this.onClickFuckGoogle}>
+    //         Hero
+    //       </Button>
+    //       <Button marginX={10} onClick={this.onClickFuckGoogle}>
+    //         Evangelist
+    //       </Button>
+    //     </ActionBar>
+    //   );
+    // }
 
     if (stage === STAGE_INIT) {
       return (
@@ -424,24 +587,25 @@ class ActionBarTakeOff extends Component {
               value={toSend}
               onChange={e => this.onChangeInputContributeATOMs(e)}
               placeholder="amount"
+              onKeyPress={this.handleKeyPressFuckGoogle}
               marginLeft={20}
               marginRight={20}
               width="25%"
               height={42}
               fontSize="20px"
               textAlign="end"
+              autoFocus
             />
             <Text color="#fff" fontSize="20px">
               ATOMs
             </Text>
           </Pane>
-          <button
-            type="button"
-            className="btn"
+          <Button
+            disabled={toSend.length === 0}
             onClick={this.onClickFuckGoogle}
           >
             Fuck Google
-          </button>
+          </Button>
         </ActionBar>
       );
     }

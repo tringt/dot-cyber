@@ -1,8 +1,8 @@
 const TIME_START = 'April 4 2020 18:00:00 GMT +3';
 
 const AUCTION = {
-  ADDR_SMART_CONTRACT: '0xc13926630c1afa229a0c4df8df2acbff03c4681e',
-  ADDR_VESTING: '0x7c2a661dac04aae4381b810c3228ccab1d11deec',
+  ADDR_SMART_CONTRACT: '0x0b1f54be915e77d9bf14268f94f8a26afab11296',
+  ADDR_VESTING: '0xd84469ecd96825c956d7ae8b072209ca89ae37e2',
   TOKEN_NAME: 'GOL',
   TOPICS_SEND:
     '0x3b599f6217e39be59216b60e543ce0d4c7d534fe64dd9d962334924e7819894e',
@@ -36,7 +36,7 @@ const TAKEOFF = {
 };
 
 const COSMOS = {
-  ADDR_FUNDING: 'cosmos1809vlaew5u5p24tvmse9kvgytwwr3ej7vd7kgq',
+  ADDR_FUNDING: 'cosmos16ahkkv0jzhtp73z83qlhqrypss6jpjm862zjst',
   CHAIN_ID: 'cosmoshub-3',
   DEFAULT_GAS: 200000,
   DEFAULT_GAS_PRICE: 0.01,
@@ -49,12 +49,11 @@ const COSMOS = {
 
 const CYBER = {
   DIVISOR_CYBER_G: 10 ** 9,
-  DENOM_CYBER: 'eul',
-  DENOM_CYBER_G: `GEUL`,
-  CYBER_WEBSOCKET_URL: 'wss://titan.cybernode.ai/websocket',
-  CYBER_NODE_URL: 'https://titan.cybernode.ai',
-  CYBER_NODE_URL_API: 'https://titan.cybernode.ai/api',
-  CYBER_NODE_URL_LCD: 'https://titan.cybernode.ai/lcd',
+  DENOM_CYBER: 'cyb',
+  DENOM_CYBER_G: `GCYB`,
+  CYBER_WEBSOCKET_URL: 'wss://ws.cyber.cybernode.ai',
+  CYBER_NODE_URL_API: 'https://api.cyber.cybernode.ai',
+  CYBER_NODE_URL_LCD: 'https://lcd.cyber.cybernode.ai',
   CYBER_INDEX_HTTPS: 'https://titan.cybernode.ai/graphql/v1/graphql',
   CYBER_INDEX_WEBSOCKET: 'wss://titan.cybernode.ai/graphql/v1/graphql',
   BECH32_PREFIX_ACC_ADDR_CYBER: 'cyber',
