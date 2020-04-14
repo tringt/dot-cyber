@@ -39,7 +39,7 @@ const injectWeb3 = InnerComponent =>
         const web3 = await waitForWeb3();
         console.log(web3.givenProvider);
         const networkId = await web3.eth.net.getId();
-        const networkContract = NETWORKSIDS.rinkeby;
+        const networkContract = NETWORKSIDS.main; // TODO
 
         if (networkContract !== networkId) {
           return this.setState({
@@ -99,7 +99,7 @@ const injectWeb3 = InnerComponent =>
       } = this.state;
       if (!isCorrectNetwork) {
         return (
-          <NotFound text="Please connect to the Ethereum Rinkeby Network" />
+          <NotFound text="Please connect to the Ethereum Mainnet Network" />
         );
       }
       if (loading) {

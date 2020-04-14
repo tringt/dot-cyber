@@ -180,7 +180,7 @@ const Succesfuuly = ({ onClickBtn, hash }) => (
         Check TX status:{' '}
         <a
           className="hash"
-          href={`https://rinkeby.etherscan.io/tx/${hash}`}
+          href={`https://etherscan.io/tx/${hash}`}
           target="_blank"
         >
           {hash}

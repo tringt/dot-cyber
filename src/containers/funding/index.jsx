@@ -19,8 +19,6 @@ import {
 } from '../../utils/fundingMath';
 import { getTxCosmos } from '../../utils/search/utils';
 
-import { getTxCosmos } from '../../utils/search/utils';
-
 const dateFormat = require('dateformat');
 
 const { ATOMsALL } = TAKEOFF;

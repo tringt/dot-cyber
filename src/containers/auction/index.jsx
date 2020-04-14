@@ -154,8 +154,8 @@ class Auction extends PureComponent {
           const day = Number.parseInt(result.topics[1]);
           console.log('day', day);
           this.getDataTableForRound(day);
-          // this.dinamics();
-          run(this.statistics);
+          this.dinamics();
+          this.statistics();
         }
       }
     );
@@ -214,7 +214,7 @@ class Auction extends PureComponent {
     const hours = Math.floor(times / (60 * 60));
     const minutes = Math.floor((times / 60) % 60);
 
-    const h = `0${hours}`.slice(-2);
+    const h = hours;
     const m = `0${minutes}`.slice(-2);
     const timeLeft = `${h} : ${m}`;
     this.setState({
@@ -513,7 +513,7 @@ class Auction extends PureComponent {
       startTimeTot,
     } = this.state;
     // console.log(table);
-    const thc = 700 * Math.pow(10, 3);
+
     return (
       <div>
         <main className="block-body auction">
@@ -524,7 +524,7 @@ class Auction extends PureComponent {
             timeLeft={timeLeft}
             currentPrice={exponentialToDecimal(currentPrice.toPrecision(2))}
             raised={exponentialToDecimal(raised.toPrecision(2))}
-            cap={formatNumber(thc * currentPrice)}
+            cap={formatNumber(AUCTION.TOKEN_ALOCATION * currentPrice)}
             TOKEN_NAME={TOKEN_NAME}
           />
           {loading && (
