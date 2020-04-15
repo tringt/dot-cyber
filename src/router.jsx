@@ -22,6 +22,7 @@ import AccountDetails from './containers/account';
 import ValidatorsDetails from './containers/validator';
 import Vesting from './containers/vesting/vesting';
 import Snap from './containers/snap';
+import ForceGraph from './containers/forceGraph/forceGraph';
 import Ipfs from './containers/ipfs/ipfs';
 import { Dots, Timer } from './components';
 import { initIpfs, setIpfsStatus } from './redux/actions/ipfs';
@@ -298,6 +299,7 @@ class AppRouter extends React.Component {
           />
           <Route path="/vesting" component={Vesting} />
           <Route path="/snap" component={Snap} />
+          <Route path="/graph" component={ForceGraph} />
           <Route path="/ipfs" component={Ipfs} />
           <Route exact path="/network/euler/block" component={Block} />
           <Route
