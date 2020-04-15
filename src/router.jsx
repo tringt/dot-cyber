@@ -275,7 +275,7 @@ class AppRouter extends React.Component {
           <Route path="/gift/:address?" component={Gift} />
           <Route path="/gol/takeoff" component={Funding} />
           <Route path="/tot" component={Got} />
-          <Route path="/auction" component={Auction} />
+          <Route path="/gol/faucet" component={Auction} />
           <Route path="/brain" component={Brain} />
           <Route exact path="/governance" component={Governance} />
           <Route path="/governance/:proposal_id" component={ProposalsDetail} />
@@ -297,9 +297,9 @@ class AppRouter extends React.Component {
             path="/network/euler/hero/:address"
             component={ValidatorsDetails}
           />
-          <Route path="/vesting" component={Vesting} />
           <Route path="/snap" component={Snap} />
           <Route path="/graph" component={ForceGraph} />
+          <Route path="/gol/vesting" component={Vesting} />
           <Route path="/ipfs" component={Ipfs} />
           <Route exact path="/network/euler/block" component={Block} />
           <Route

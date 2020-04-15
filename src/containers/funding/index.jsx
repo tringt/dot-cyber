@@ -6,8 +6,13 @@ import Dinamics from './dinamics';
 import Statistics from './statistics';
 import Table from './table';
 import ActionBarTakeOff from './actionBar';
-import { asyncForEach, formatNumber } from '../../utils/utils';
-import { Loading, LinkWindow } from '../../components/index';
+import {
+  asyncForEach,
+  formatNumber,
+  trimString,
+  getTimeRemaining,
+} from '../../utils/utils';
+import { Loading, LinkWindow, Copy } from '../../components';
 import { COSMOS, TAKEOFF } from '../../utils/config';
 import {
   cybWon,
@@ -18,6 +23,7 @@ import {
   getGroupAddress,
 } from '../../utils/fundingMath';
 import { getTxCosmos } from '../../utils/search/utils';
+import PopapAddress from './popap';
 
 const dateFormat = require('dateformat');
 
@@ -66,13 +72,59 @@ class Funding extends PureComponent {
       dataRewards: [],
       loader: true,
       loading: 0,
+      popapAdress: false,
     };
   }
 
   async componentDidMount() {
     await this.getDataWS();
     await this.getTxsCosmos();
+    this.initClock();
   }
+
+  initClock = () => {
+    const dataStartTakeoff = COSMOS.TIME_START;
+    const timeStartTakeoff =
+      Date.parse(dataStartTakeoff) - Date.parse(new Date());
+    console.log(timeStartTakeoff);
+    if (timeStartTakeoff <= 0) {
+      const deadline = `${COSMOS.TIME_END}`;
+      const startTime = Date.parse(deadline) - Date.parse(new Date());
+      if (startTime <= 0) {
+        this.setState({
+          time: 'end',
+        });
+      } else {
+        this.initializeClock(deadline);
+      }
+    } else {
+      this.setState({
+        time: '∞',
+      });
+    }
+  };
+
+  initializeClock = endtime => {
+    let timeinterval;
+    const updateClock = () => {
+      const t = getTimeRemaining(endtime);
+      if (t.total <= 0) {
+        clearInterval(timeinterval);
+        this.setState({
+          time: 'end',
+        });
+        return true;
+      }
+      const hours = `0${t.hours}`.slice(-2);
+      const minutes = `0${t.minutes}`.slice(-2);
+      this.setState({
+        time: `${t.days}d:${hours}h:${minutes}m`,
+      });
+    };
+
+    updateClock();
+    timeinterval = setInterval(updateClock, 10000);
+  };
 
   getTxsCosmos = async () => {
     const dataTx = await getTxCosmos();
@@ -333,6 +385,18 @@ class Funding extends PureComponent {
     });
   };
 
+  onClickPopapAdress = () => {
+    this.setState({
+      popapAdress: false,
+    });
+  };
+
+  onClickPopapAdressTrue = () => {
+    this.setState({
+      popapAdress: true,
+    });
+  };
+
   render() {
     const {
       groups,
@@ -345,6 +409,8 @@ class Funding extends PureComponent {
       dataRewards,
       pin,
       loader,
+      popapAdress,
+      time,
     } = this.state;
 
     if (loader) {
@@ -369,39 +435,12 @@ class Funding extends PureComponent {
 
     return (
       <span>
-        <Pane
-          width="100vw"
-          height="calc(100vh - 162px)"
-          position="absolute"
-          zIndex={2}
-          backgroundColor="#020202ba"
-        >
-          <Pane
-            width="350px"
-            height="200px"
-            boxShadow="0 0 6px 1px #3ab793"
-            position="absolute"
-            zIndex={2}
-            backgroundColor="#000"
-            right="50%"
-            transform="translate(50%, -20%)"
-            borderRadius="10px"
-            top="20%"
-            paddingX={20}
-            paddingY={20}
-          >
-            text
-            <QRCode
-              size={128}
-              bgColor="#000"
-              fgColor="#3ab793"
-              level="L"
-              includeMargin
-              renderAs="svg"
-              value={COSMOS.ADDR_FUNDING}
-            />
-          </Pane>
-        </Pane>
+        {popapAdress && (
+          <PopapAddress
+            address={COSMOS.ADDR_FUNDING}
+            onClickPopapAdress={this.onClickPopapAdress}
+          />
+        )}
 
         <main className="block-body">
           <Pane
@@ -455,6 +494,7 @@ class Funding extends PureComponent {
           </Pane>
           <Statistics
             atomLeff={formatNumber(atomLeff)}
+            time={time}
             won={formatNumber(Math.floor(won * 10 ** -9 * 1000) / 1000)}
             price={formatNumber(
               Math.floor(currentPrice * 10 ** -9 * 1000) / 1000
@@ -465,7 +505,10 @@ class Funding extends PureComponent {
 
           {Object.keys(groups).length > 0 && <Table data={groups} pin={pin} />}
         </main>
-        <ActionBarTakeOff />
+        <ActionBarTakeOff
+          initClock={this.initClock}
+          onClickPopapAdressTrue={this.onClickPopapAdressTrue}
+        />
       </span>
     );
   }

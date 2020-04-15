@@ -73,22 +73,9 @@ class Auction extends PureComponent {
   }
 
   async componentDidMount() {
-    const { accounts } = this.props;
     this.init();
     this.subscription();
     this.accountsChanged();
-
-    const { contract } = this.props;
-    const youCYB = (
-      await contract.getPastEvents('LogClaim', {
-        fromBlock: 0,
-        toBlock: 'latest',
-      })
-    ).filter(i => i.returnValues.user === accounts);
-
-    console.log({
-      youCYB,
-    });
   }
 
   init = async () => {
@@ -216,7 +203,7 @@ class Auction extends PureComponent {
 
     const h = hours;
     const m = `0${minutes}`.slice(-2);
-    const timeLeft = `${h} : ${m}`;
+    const timeLeft = `${h}h : ${m}m`;
     this.setState({
       timeLeft,
     });
@@ -338,13 +325,6 @@ class Auction extends PureComponent {
       contractAuctionUtils,
     } = this.props;
     const { accounts } = this.state;
-    const { contract } = this.props;
-    const youCYB = (
-      await contract.getPastEvents('LogClaim', {
-        fromBlock: 0,
-        toBlock: 'latest',
-      })
-    ).filter(i => i.returnValues.user === accounts);
     console.log('accounts', accounts);
     let userBuysAuctionUtils = null;
     let userClaims = null;
@@ -556,14 +536,16 @@ class Auction extends PureComponent {
             </div>
           )}
         </main>
-        <ActionBarAuction
-          web3={this.props.web3}
-          contract={this.props.contract}
-          minRound={roundThis}
-          maxRound={numberOfDays}
-          claimed={claimedAll}
-          startAuction={typeTime === 'intro'}
-        />
+        {!loading && (
+          <ActionBarAuction
+            web3={this.props.web3}
+            contract={this.props.contract}
+            minRound={roundThis}
+            maxRound={numberOfDays}
+            claimed={claimedAll}
+            startAuction={typeTime === 'intro'}
+          />
+        )}
       </div>
     );
   }

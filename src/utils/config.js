@@ -10,7 +10,7 @@ const AUCTION = {
     '0x51223fdc0a25891366fb358b4af9fe3c381b1566e287c61a29d01c8a173fe4f4',
   TOPICS_VESTING:
     '0x552f182d4b9ab267a8580e2aa80cf374b7aabc8f528b7e9eea58919eea48e87d',
-  HTTP_PROVIDER_URL: 'https://mainnet.infura.io/metamask',
+  HTTP_PROVIDER_URL: 'https://mars.cybernode.ai/geth/',
   ROUND_DURATION: 1000 * 60 * 60 * 23 + 1,
   TOKEN_ALOCATION: 15 * 10 ** 3,
 };
@@ -37,7 +37,9 @@ const TAKEOFF = {
 };
 
 const COSMOS = {
-  ADDR_FUNDING: 'cosmos16ahkkv0jzhtp73z83qlhqrypss6jpjm862zjst',
+  ADDR_FUNDING: 'cosmos1latzme6xf6s8tsrymuu6laf2ks2humqv2tkd9a',
+  TIME_START: 'April 27 2020 21:50:00 GMT +3',
+  TIME_END: 'July 07 2020 21:50:00 GMT +3',
   CHAIN_ID: 'cosmoshub-3',
   DEFAULT_GAS: 200000,
   DEFAULT_GAS_PRICE: 0.01,
@@ -52,7 +54,7 @@ const CYBER = {
   DIVISOR_CYBER_G: 10 ** 9,
   DENOM_CYBER: 'cyb',
   DENOM_CYBER_G: `GCYB`,
-  CYBER_WEBSOCKET_URL: 'wss://ws.cyber.cybernode.ai',
+  CYBER_WEBSOCKET_URL: 'wss://api.cyber.cybernode.ai/websocket',
   CYBER_NODE_URL_API: 'https://api.cyber.cybernode.ai',
   CYBER_NODE_URL_LCD: 'https://lcd.cyber.cybernode.ai',
   CYBER_INDEX_HTTPS: 'https://titan.cybernode.ai/graphql/v1/graphql',
