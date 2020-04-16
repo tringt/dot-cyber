@@ -35,6 +35,7 @@ import GolDelegation from './containers/gol/pages/delegation';
 import GolLifetime from './containers/gol/pages/lifetime';
 import GolRelevance from './containers/gol/pages/relevance';
 import GolLoad from './containers/gol/pages/load';
+import Battery from './containers/battery';
 
 const IPFS = require('ipfs');
 
@@ -307,6 +308,7 @@ class AppRouter extends React.Component {
             component={BlockDetails}
           />
           <Route path="/network/euler/parameters" component={ParamNetwork} />
+          <Route path="/battery" component={Battery} />
 
           <Route exact path="*" component={NotFound} />
         </Switch>
