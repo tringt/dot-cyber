@@ -23,7 +23,7 @@ import ValidatorsDetails from './containers/validator';
 import Vesting from './containers/vesting/vesting';
 // import ForceGraph from './containers/forceGraph/forceGraph';
 import Ipfs from './containers/ipfs/ipfs';
-import { Dots, Timer } from './components';
+import { Dots } from './components';
 import { initIpfs, setIpfsStatus } from './redux/actions/ipfs';
 import { setTypeDevice } from './redux/actions/settings';
 import BlockDetails from './containers/blok/blockDetails';
