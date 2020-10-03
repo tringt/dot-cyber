@@ -21,7 +21,7 @@ import TxsDetails from './containers/txs/txsDetails';
 import AccountDetails from './containers/account';
 import ValidatorsDetails from './containers/validator';
 import Vesting from './containers/vesting/vesting';
-// import ForceGraph from './containers/forceGraph/forceGraph';
+import ForceGraph from './containers/forceGraph/forceGraph';
 import Ipfs from './containers/ipfs/ipfs';
 import { Dots, Timer } from './components';
 import { initIpfs, setIpfsStatus } from './redux/actions/ipfs';
@@ -51,9 +51,9 @@ function AppRouter({
 }) {
   const [loader, setLoader] = useState(true);
 
-  useEffect(() => {
-    init();
-  }, []);
+  // useEffect(() => {
+  //   init();
+  // }, []);
 
   const init = async () => {
     setIpfsStatusProps(false);
@@ -148,9 +148,9 @@ function AppRouter({
     }
   };
 
-  if (loader) {
-    return <Dots />;
-  }
+  // if (loader) {
+  //   return <Dots />;
+  // }
 
   return (
     <Router history={history}>
@@ -183,7 +183,7 @@ function AppRouter({
           path="/network/euler/hero/:address"
           component={ValidatorsDetails}
         />
-        {/* <Route path="/graph" component={ForceGraph} /> */}
+        <Route path="/graph" component={ForceGraph} />
         <Route path="/gol/vesting" component={Vesting} />
         <Route path="/ipfs/:cid" component={Ipfs} />
         <Route exact path="/network/euler/block" component={Block} />
